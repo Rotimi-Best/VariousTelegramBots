@@ -9,10 +9,11 @@ var MsgStorage = require('./utils/msg-storage');
 
 const VALID_MESSAGE = /^[^\/^@](.*)$/;
 const QUOTES_CMD = /^(\/quotes[^ ]*$|список цитат$|бот (цитаты|список цитат))/;
-const QUOTE_CMD = /^(\/quote[^ ]*$|цитата$|бот (жги|цитата|процитируй|(.+?)цитату|скажи|поумничай|(.+?)что думаешь))/;
+const QUOTE_CMD = /^(\/quote[^ ]*$|цитата$|бот (жги|цитата|процитируй|(.*?)цитату|скажи|поумничай|(.*?)что думаешь))/;
 const VERSION_CMD = /^\/version[^ ]*$/;
 const COMMANDS = [QUOTES_CMD, QUOTE_CMD, VERSION_CMD];
 
+const QUOTE_MAX_LENGTH = 50;
 const MAX_QUOTES = 150;
 
 var storages = { };
@@ -26,10 +27,12 @@ var bot = new TelegramBot(process.env.BOT_TOKEN, {
 
 // === adding messages to the storage
 bot.on('message', (msg) => {
-  if(!msg.text || msg.text.length == 0) return;
+  if(!msg.text || msg.forward_from) return;
 
   var text = msg.text;
   var chatId = msg.chat.id;
+
+  if(text.length == 0 || text.length >= QUOTE_MAX_LENGTH) return;
 
   if(!isMessageValid(text)) {
     log(log.INF, 'Message ignored: '  + text + ' (' + msg.chat.title + ')')
