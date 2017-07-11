@@ -1,6 +1,6 @@
 {
   "name": "telegram-bots",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Various Telegram Bots",
   "engines": {
     "node": "6.10.2"
