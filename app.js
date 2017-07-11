@@ -15,9 +15,22 @@ if(process.env.DEBUG == 1) {
   });
 }
 
-// === TO KEEP APP ALIVE
+// Heroku specific
+
+var app = require('express')();
+
+app.set('port', (process.env.PORT || 5000));
+
+app.get('/', function(request, response) {
+  response.send('Not much to look at');
+});
+
+app.listen(app.get('port'), function() {
+  console.log('Telegram bot is running on port', app.get('port'));
+});
 
 if(process.env.LOCAL == 0) {
+  // SMALL TRICK TO KEEP HEROKU APP ALIVE
   var http = require('http');
   setInterval(function() {
       http.get('http://mighty-fortress-44336.herokuapp.com');
