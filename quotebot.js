@@ -8,9 +8,9 @@ var log = require('./utils/log');
 var MsgStorage = require('./utils/msg-storage');
 
 const VALID_MESSAGE = /^[^\/^@](.*)$/;
-const QUOTES_CMD = /^(\/quotes[^ ]*$|список цитат$|бот (цитаты|список цитат))/;
-const QUOTE_CMD = /^(\/quote[^ ]*$|цитата$|бот (жги|цитата|процитируй|(.*?)цитату|скажи|поумничай|(.*?)что думаешь))/;
-const VERSION_CMD = /^\/version[^ ]*$/;
+const QUOTES_CMD = /^(\/quotes(|@[^ ]*)$|список цитат$|бот (цитаты|список цитат|что запомнил?))/;
+const QUOTE_CMD = /^(\/quote(|@[^ ]*)$|цитата$|бот (жги|цитата|процитируй|(.*?)цитату|скажи|поумничай|(.*?)что думаешь|тво(ё|е) мнение))/;
+const VERSION_CMD = /^\/version(|@[^ ]*)$/;
 const COMMANDS = [QUOTES_CMD, QUOTE_CMD, VERSION_CMD];
 
 const QUOTE_MAX_LENGTH = 50;
