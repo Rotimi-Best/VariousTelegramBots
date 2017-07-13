@@ -1,6 +1,6 @@
-const Storage = require('~/utils/storage');
-const DropboxHelper = require('~/utils/dropbox-helper');
-const log = require('~/utils/log');
+const Storage = require('../utils/storage');
+const DropboxHelper = require('../utils/dropbox-helper');
+const log = require('../utils/log');
 
 const QUOTES_CMD = /^(\/quotes(|@[^ ]*)$|бот[, ]+(цитаты|сколько цитат|(что|сколько)(| цитат) запомнил?))/i;
 const QUOTE_CMD = /^(\/quote(|@[^ ]*)$|цитата$|бот[, ]+(жги|цитата|процитируй|(.*?)цитату|скажи|поумничай|(.*?)что думаешь|тво(ё|е)[ ]+мнение|ответь|дай[ ]+совет|посоветуй|прокомментируй|выскажись))/i;

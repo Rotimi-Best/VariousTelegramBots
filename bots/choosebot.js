@@ -1,4 +1,4 @@
-const log = require('~/utils/log');
+const log = require('../utils/log');
 const jsonfile = require('jsonfile');
 
 const CHOOSE_CMD = /^(?:\/choose(?:|@[^ ]*)|бот[, ]+(?:|подробно )(?:выбор|выбери|(кто|что)[ ]+лучше(?:\?|))(?: из|)(?::|)) (.+)/i;

@@ -1,4 +1,4 @@
-const log = require('~/utils/log');
+const log = require('../utils/log');
 
 const VERSION_CMD = /^\/version(|@[^ ]*)$/i;
 
