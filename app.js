@@ -33,7 +33,7 @@ global.isAdmin = function(obj) {
 }
 
 const TelegramBot = require('node-telegram-bot-api');
-const DropboxHelper = require('~/utils/dropbox-helper')
+const DropboxHelper = require('~/utils/dropbox-helper');
 const HerokuApp = require('~/heroku-app');
 const KernelBot = require('~/bots/kernelbot');
 const QuoteBot = require('~/bots/quotebot');
