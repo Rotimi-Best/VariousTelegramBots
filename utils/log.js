@@ -1,8 +1,8 @@
-var log = function(level, message) {
+function log(level, message) {
   if(!log.enabled) return;
 
   console.log('# ' + getDate() + ' # ' + level + ' # ' + message);
-};
+}
 
 log.INF = 'INF';
 log.ERR = 'ERR';
