@@ -1,7 +1,7 @@
 const log = require('../utils/log');
 const jsonfile = require('jsonfile');
 
-const CHOOSE_CMD = /^(?:\/choose(?:|@[^ ]*)|бот[, ]+(?:|подробно )(?:выбор|выбери|(кто|что)[ ]+лучше(?:\?|))(?: из|)(?::|)) (.+)/i;
+const CHOOSE_CMD = /^(?:\/choose(?:|@[^ ]*)|бот[, ]+(?:|подробно )(?:выбор|выбери|(?:кто|что)[ ]+лучше(?:\?|))(?: из|)(?::|)) (.+)/i;
 
 GLOBAL_COMMANDS.push(CHOOSE_CMD);
 
