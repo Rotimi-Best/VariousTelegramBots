@@ -13,7 +13,7 @@ function KernelBot(bot) {
 
     const chatId = msg.chat.id;
 
-    bot.sendMessage(chatId, require('~/package.json').version);
+    bot.sendMessage(chatId, require('../package.json').version);
   });
 }
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http');
-const log = require('~/utils/log');
+const log = require('./utils/log');
 
 function HerokuApp() {
   this.app = express();
