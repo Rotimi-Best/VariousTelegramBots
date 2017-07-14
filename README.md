@@ -22,13 +22,13 @@ Available commands:
 
 This bot chooses one variant from the list, separated by commas or spaces.
 
+Available commands:
+- `/choose <variants>` - Sends randomly selected variant from the list
+
 Examples:
 - `/choose my variant 1, something else, idk`
 - `/choose yes no`
 - `/choose yes, no maybe` - It won't work as you want it to. The bot will choose whether `yes` or `no maybe`, because when you use commas to separate variants, spaces are being ignored (so you can build sentences with more than one word).
-
-Available commands:
-- `/choose \<variants\>` - Sends randomly selected variant from the list
 
 ## KernelBot.js
 
