@@ -1,4 +1,4 @@
-# Various Telegram Bots
+# Various Telegram Bots 1.1.0
 
 A set of small bots for telegrams built in Node.js.
 They're all combined into all-in-one bot (but you can easily separate them).
