@@ -16,7 +16,6 @@
   "dependencies": {
     "dropbox": "2.5.4",
     "express": "4.15.2",
-    "jsonfile": "3.0.1",
     "node-telegram-bot-api": "0.27.1"
   },
   "license": "MIT"
