@@ -1,5 +1,5 @@
 const Dropbox = require('dropbox');
-const log = require('~/utils/log');
+const log = require('./log');
 
 function DropboxHelper(accessToken) {
   this.accessToken = accessToken || DropboxHelper.accessToken;
