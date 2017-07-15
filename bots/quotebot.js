@@ -8,6 +8,8 @@ const CLEAR_QUOTES_CMD = /^\/clearquotes(?:|@[^ ]*)[ ]*(.*)$/i;
 
 GLOBAL_COMMANDS.push(QUOTES_CMD, QUOTE_CMD, CLEAR_QUOTES_CMD);
 
+const ENCODING_VERSION = 1;
+
 const QUOTE_MAX_LENGTH = 50;
 const MAX_QUOTES = 500;
 
@@ -152,9 +154,6 @@ QuoteBot.prototype.save = function(databasePath) {
 
     encoded.push({ id: id, size: storage.getMaxSize(), values: storage.toArray() });
   }
-
-  // for backward compability
-  encoded.version = 1;
 
   this.dropbox.save(databasePath, JSON.stringify(encoded), () => {
     log(log.INF, 'Quotes have been saved!');
