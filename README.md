@@ -1,4 +1,4 @@
-# Various Telegram Bots 1.1.0
+# Various Telegram Bots 1.2.2
 
 A set of small bots for telegrams built in Node.js.
 They're all combined into all-in-one bot (but you can easily separate them).
@@ -24,11 +24,21 @@ This bot chooses one variant from the list, separated by commas or spaces.
 
 Available commands:
 - `/choose <variants>` - Sends randomly selected variant from the list
+- `/yes_or_no` - Sends `yes` or `no`
 
 Examples:
 - `/choose my variant 1, something else, idk`
-- `/choose yes no`
-- `/choose yes, no maybe` - It won't work as you want it to. The bot will choose whether `yes` or `no maybe`, because when you use commas to separate variants, spaces are being ignored (so you can build sentences with more than one word).
+- `/choose yes no maybe`
+- `/choose yes, no maybe` - It won't work as you, I think, want it to. The bot will choose whether `yes` or `no maybe`, because when you use commas to separate variants, spaces are being ignored (so you can build sentences with more than one word).
+
+## ReactionBot.js
+
+This bot reacts to some chat messages with an emoji or random predefined text.
+
+You can reply to a message with the command `/react` and bot will reply to the message with an emoji or text (as set in the code).
+
+Available commands:
+- `/react` - Reacts to a message with an emoji or random predefined text
 
 ## KernelBot.js
 

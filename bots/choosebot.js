@@ -1,10 +1,13 @@
 const log = require('../utils/log');
 
 const CHOOSE_CMD = /^(?:\/choose(?:|@[^ ]*)|бот[, ]+(?:|подробно )(?:выбор|выбери|(?:кто|что)[ ]+лучше(?:\?|))(?: из|)(?::|)) (.+)/i;
+const YES_OR_NO_CMD = /^(?:\/yes_or_no(?:|@[^ ]*)|бот[, ]+(?:да(?:,|)(?:[ ]+или[ ]+|\/|;|[ ]+)нет|правда[ ]+ли[ ]+это|это[ ]+правда))/i;
 
-GLOBAL_COMMANDS.push(CHOOSE_CMD);
+const YES_OR_NO_ANSWERS = ['да', 'нет'];
 
-const VARIANTS_SEPARATOR = /[ ]*(,| или | и )[ ]*/;
+GLOBAL_COMMANDS.push(CHOOSE_CMD, YES_OR_NO_CMD);
+
+const VARIANTS_SEPARATOR = /[ ]*(,| или | и | либо |;)[ ]*/;
 
 function ChooseBot(bot) {
   this.enabled = true;
@@ -14,8 +17,6 @@ function ChooseBot(bot) {
     if(!this.enabled) return;
 
     if(match.length < 2) return;
-
-    const chatId = msg.chat.id;
 
     var matched = match[1];
 
@@ -43,9 +44,20 @@ function ChooseBot(bot) {
       result = selected;
     }
 
-    bot.sendMessage(chatId, result);
+    bot.sendMessage(msg.chat.id, result);
+  });
+
+  // === /choose command or text alias
+  bot.onText(YES_OR_NO_CMD, (msg, match) => {
+    if(!this.enabled) return;
+
+    bot.sendMessage(msg.chat.id, this.yesOrNo());
   });
 };
+
+ChooseBot.prototype.yesOrNo = function() {
+  return YES_OR_NO_ANSWERS[Math.floor(Math.random() * 2)];
+}
 
 ChooseBot.prototype.start = function() {
   this.enabled = true;

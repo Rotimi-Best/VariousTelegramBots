@@ -38,6 +38,7 @@ const HerokuApp = require('./heroku-app');
 const KernelBot = require('./bots/kernelbot');
 const QuoteBot = require('./bots/quotebot');
 const ChooseBot = require('./bots/choosebot');
+const ReactionBot = require('./bots/reactionbot');
 const log = require('./utils/log');
 
 log(log.INF, '---------------------------------');
@@ -59,6 +60,7 @@ var bots = [];
 bots.push(new KernelBot(bot));
 bots.push(new QuoteBot(bot, 'quotebot/storages.json', process.env.DATABASE_SAVE_INTERVAL));
 bots.push(new ChooseBot(bot));
+bots.push(new ReactionBot(bot));
 
 bots.forEach(bot => bot.start());
 
