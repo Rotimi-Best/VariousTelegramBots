@@ -34,7 +34,8 @@ Examples:
 ## ReactionBot.js
 
 This bot reacts to some chat messages with an emoji or random predefined text.
-You can reply to some message with command `/react` and bot will reply to the exact message with an emoji or text (as set in the code).
+
+You can reply to a message with the command `/react` and bot will reply to the message with an emoji or text (as set in the code).
 
 Available commands:
 - `/react` - Reacts to a message with an emoji or random predefined text
