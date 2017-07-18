@@ -3,7 +3,7 @@ const DropboxHelper = require('../utils/dropbox-helper');
 const log = require('../utils/log');
 
 const QUOTES_CMD = /^(\/quotes(|@[^ ]*)$|бот[, ]+(цитаты|сколько цитат|(что|сколько)(| цитат) запомнил?))/i;
-const QUOTE_CMD = /^(\/quote(|@[^ ]*)$|цитата$|бот[, ]+(жги|цитата|процитируй|(.*?)цитату|скажи|поумничай|(.*?)что думаешь|тво(ё|е)[ ]+мнение|ответь|дай[ ]+совет|посоветуй|прокомментируй|выскажись))/i;
+const QUOTE_CMD = /^(\/quote(|@[^ ]*)$|цитата$|бот[, ]+(жги|цитата|процитируй|(.*?)цитату|скажи|поумничай|(.*?)что думаешь|ответь|дай[ ]+совет|посоветуй|прокомментируй|выскажись))/i;
 const CLEAR_QUOTES_CMD = /^\/clearquotes(?:|@[^ ]*)[ ]*(.*)$/i;
 
 GLOBAL_COMMANDS.push(QUOTES_CMD, QUOTE_CMD, CLEAR_QUOTES_CMD);
@@ -61,7 +61,7 @@ function QuoteBot(bot, databasePath, saveInterval) {
     bot.forwardMessage(chatId, randomMsg.chat_id, randomMsg.message_id, { disable_notification: true });
   });
 
-  // === /quotes command
+  // === /quotes command or text alias
   bot.onText(QUOTES_CMD, (msg) => {
     if(!this.enabled) return;
 
@@ -77,7 +77,7 @@ function QuoteBot(bot, databasePath, saveInterval) {
     bot.sendMessage(chatId, result);
   });
 
-  // === /clearquotes command
+  // === /clearquotes command or text alias
   bot.onText(CLEAR_QUOTES_CMD, (msg, match) => {
     if(!this.enabled) return;
 
@@ -162,13 +162,13 @@ QuoteBot.prototype.save = function(databasePath) {
   });
 }
 
-QuoteBot.prototype.start = () => {
+QuoteBot.prototype.start = function() {
   this.enabled = true;
 
   log(log.INF, 'QuoteBot started!');
 }
 
-QuoteBot.prototype.stop = () => {
+QuoteBot.prototype.stop = function() {
   this.enabled = false;
 
   log(log.INF, 'QuoteBot stopped.');

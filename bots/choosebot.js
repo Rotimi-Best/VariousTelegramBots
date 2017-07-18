@@ -5,7 +5,7 @@ const YES_OR_NO_CMD = /^(?:\/yes_or_no(?:|@[^ ]*)|бот[, ]+(?:да(?:,|)(?:[ ]
 
 const YES_OR_NO_ANSWERS = ['да', 'нет'];
 
-GLOBAL_COMMANDS.push(CHOOSE_CMD);
+GLOBAL_COMMANDS.push(CHOOSE_CMD, YES_OR_NO_CMD);
 
 const VARIANTS_SEPARATOR = /[ ]*(,| или | и | либо |;)[ ]*/;
 
