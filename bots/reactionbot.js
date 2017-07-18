@@ -64,35 +64,35 @@ function ReactionBot(bot) {
       this.react(msg.chat.id);
     }
   });
-}
+};
 
-ReactionBot.prototype.react = function(chat_id, msg_id) {
+ReactionBot.prototype.react = function(chatId, msgId) {
   var options = { disable_notification: true };
 
-  if (msg_id) options.reply_to_message_id = msg_id;
+  if (msgId) options.reply_to_message_id = msgId;
 
   var reaction = REACTIONS[Math.floor(Math.random() * REACTIONS.length)];
 
-  this.bot.sendMessage(chat_id, reaction, options);
-}
+  this.bot.sendMessage(chatId, reaction, options);
+};
 
 ReactionBot.prototype.generateInterval = function() {
   var min = REACT_MSG_INTERVAL[0];
   var max = REACT_MSG_INTERVAL[1];
 
   return Math.floor(min + Math.random() * (max - min));
-}
+};
 
 ReactionBot.prototype.start = function() {
   this.enabled = true;
 
   log(log.INF, 'ReactionBot started!');
-}
+};
 
 ReactionBot.prototype.stop = function() {
   this.enabled = false;
 
   log(log.INF, 'ReactionBot stopped.');
-}
+};
 
 module.exports = ReactionBot;

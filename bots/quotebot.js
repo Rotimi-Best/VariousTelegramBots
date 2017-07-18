@@ -8,12 +8,15 @@ const CLEAR_QUOTES_CMD = /^\/clearquotes(?:|@[^ ]*)[ ]*(.*)$/i;
 
 GLOBAL_COMMANDS.push(QUOTES_CMD, QUOTE_CMD, CLEAR_QUOTES_CMD);
 
-const ENCODING_VERSION = 1;
+const ENCODING_VERSION = 2;
 
+const MAX_QUOTE_ATTEMPTS = 10;
 const QUOTE_MAX_LENGTH = 50;
 const MAX_QUOTES = 500;
 
 function QuoteBot(bot, databasePath, saveInterval) {
+  this.bot = bot;
+
   this.enabled = true;
   this.storages = { };
 
@@ -21,7 +24,7 @@ function QuoteBot(bot, databasePath, saveInterval) {
   this.databasePath = databasePath || 'quotebot.db.json';
 
   // === adding messages to the storage
-  bot.on('message', (msg) => {
+  this.bot.on('message', (msg) => {
     if(!this.enabled) return;
 
     // >= 0 because group chat ids are negative
@@ -40,7 +43,7 @@ function QuoteBot(bot, databasePath, saveInterval) {
       this.storages[chatId] = new Storage(MAX_QUOTES);
     }
 
-    var result = this.storages[chatId].add({ chat_id: msg.chat.id, message_id: msg.message_id });
+    var result = this.storages[chatId].add({ message_id: msg.message_id });
 
     log(log.INF, 'Message ' + (result? 'added' : 'not added') + ': ' + text + ' (' + msg.chat.title + ')');
   });
@@ -49,16 +52,7 @@ function QuoteBot(bot, databasePath, saveInterval) {
   bot.onText(QUOTE_CMD, (msg) => {
     if(!this.enabled) return;
 
-    const chatId = msg.chat.id;
-
-    if(!this.storages[chatId] || this.storages[chatId].getSize() == 0) {
-      bot.sendMessage(chatId, 'Нечего цитировать.');
-      return;
-    }
-
-    var randomMsg = this.storages[chatId].random();
-
-    bot.forwardMessage(chatId, randomMsg.chat_id, randomMsg.message_id, { disable_notification: true });
+    this.quote(msg.chat.id);
   });
 
   // === /quotes command or text alias
@@ -74,11 +68,11 @@ function QuoteBot(bot, databasePath, saveInterval) {
 
     var result = 'Доступно цитат в этом чате: ' + this.storages[chatId].getSize();
 
-    bot.sendMessage(chatId, result);
+    this.bot.sendMessage(chatId, result);
   });
 
   // === /clearquotes command or text alias
-  bot.onText(CLEAR_QUOTES_CMD, (msg, match) => {
+  this.bot.onText(CLEAR_QUOTES_CMD, (msg, match) => {
     if(!this.enabled) return;
 
     const chatId = msg.chat.id;
@@ -91,9 +85,9 @@ function QuoteBot(bot, databasePath, saveInterval) {
             this.storages = { };
             this.save();
 
-            bot.sendMessage(chatId, 'База данных QuoteBot была очищена.');
+            this.bot.sendMessage(chatId, 'База данных QuoteBot была очищена.');
           } else {
-            bot.sendMessage(chatId, 'Только администратор приложения может это делать.');
+            this.bot.sendMessage(chatId, 'Только администратор приложения может это делать.');
           }
         }
         else if(isAdmin(member)) {
@@ -102,9 +96,9 @@ function QuoteBot(bot, databasePath, saveInterval) {
             this.save();
           }
 
-          bot.sendMessage(chatId, 'Список цитат был очищен.');
+          this.bot.sendMessage(chatId, 'Список цитат был очищен.');
         } else {
-          bot.sendMessage(chatId, 'Только администраторы могут это делать.');
+          this.bot.sendMessage(chatId, 'Только администраторы могут это делать.');
         }
       });
   });
@@ -116,6 +110,35 @@ function QuoteBot(bot, databasePath, saveInterval) {
     setInterval((self => () => self.save())(this), this.saveInterval);
   });
 }
+
+QuoteBot.prototype.quote = function(chatId, attempts) {
+  attempts = attempts || 1;
+
+  if(!this.storages[chatId] || this.storages[chatId].getSize() == 0) {
+    this.bot.sendMessage(chatId, 'Нечего цитировать.');
+    return;
+  }
+
+  var randomMsg = this.storages[chatId].random();
+
+  this.bot.forwardMessage(chatId, chatId, randomMsg.message_id, { disable_notification: true })
+    .catch(error => {
+      if (error.response.statusCode == 400) {
+        if (attempts >= MAX_QUOTE_ATTEMPTS) {
+          log(log.ERR, "Couldn't quote deleted message and couldn't find another one :(");
+
+          this.bot.sendMessage(chatId, 'Не удалось ничего процитировать.');
+          return;
+        }
+
+        log(log.ERR, "Couldn't quote deleted message, trying another one.. (" + attempts + ")");
+
+        this.quote(chatId, attempts + 1);
+      } else {
+        log(log.ERR, 'Catched error: ' + JSON.stringify(error.response));
+      }
+    });
+};
 
 QuoteBot.prototype.load = function(databasePath, onResponse) {
   databasePath = databasePath || this.databasePath;
@@ -135,7 +158,7 @@ QuoteBot.prototype.load = function(databasePath, onResponse) {
     log(log.ERR, 'Error while loading quotes: ' + err.text.error_summary);
     if(onResponse) onResponse(null, err);
   });
-}
+};
 
 QuoteBot.prototype.save = function(databasePath) {
   databasePath = databasePath || this.databasePath;
@@ -152,7 +175,7 @@ QuoteBot.prototype.save = function(databasePath) {
       continue;
     }
 
-    encoded.push({ id: id, size: storage.getMaxSize(), values: storage.toArray() });
+    encoded.push({ id: id, size: storage.getMaxSize(), values: storage.toArray(), v: ENCODING_VERSION });
   }
 
   this.dropbox.save(databasePath, JSON.stringify(encoded), () => {
@@ -160,18 +183,18 @@ QuoteBot.prototype.save = function(databasePath) {
   }, (err) => {
     log(log.ERR, 'Error while saving quotes: ' + err.text.error_summary)
   });
-}
+};
 
 QuoteBot.prototype.start = function() {
   this.enabled = true;
 
   log(log.INF, 'QuoteBot started!');
-}
+};
 
 QuoteBot.prototype.stop = function() {
   this.enabled = false;
 
   log(log.INF, 'QuoteBot stopped.');
-}
+};
 
 module.exports = QuoteBot;
