@@ -1,3 +1,5 @@
+const ArrayUtil = require('./array-util');
+
 function Storage(size, values) {
   this._maxSize = size || 100;
   this._storage = values || [];
@@ -29,7 +31,7 @@ Storage.prototype.toArray = function() {
 }
 
 Storage.prototype.random = function() {
-  return this._storage[Math.floor(Math.random() * this.getSize())];
+  return ArrayUtil.random(this._storage);
 }
 
 Storage.prototype.clear = function() {

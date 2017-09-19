@@ -7,7 +7,8 @@ GLOBAL_COMMANDS.push(REACT_CMD);
 const REACTIONS = [
   '🤔', '😳', '😐', '🙊', '😡', '😏', '😕', '🙄',
   '🤢', '👌🏻👈🏻', '🍆', '🌚', '🌝', '😟', '🗑', '😅',
-  '😰', '🙃', '🌕🌖🌗🌘🌚', '🤤'
+  '😰', '🙃', '🌕🌖🌗🌘🌚', '🤤', '¯\\_(ツ)_/¯', 'ми ло та',
+  'лови плюсик', 'хмык', 'копец'
 ];
 
 const REACT_MSG_INTERVAL = [15, 75];
@@ -64,7 +65,7 @@ function ReactionBot(bot) {
       this.react(msg.chat.id);
     }
   });
-};
+}
 
 ReactionBot.prototype.react = function(chatId, msgId) {
   var options = { disable_notification: true };
